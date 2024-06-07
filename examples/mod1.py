@@ -40,19 +40,33 @@ def send_xrp(seed, amount, destination):
     sending_wallet = xrpl.wallet.Wallet.from_seed(seed)
     # Create a new client
     client = xrpl.clients.JsonRpcClient(testnet_url)
-    # Create a payment transaction
-    payment = xrpl.models.transactions.Payment(
-        account=sending_wallet.address,
-        # use xrp_to_drops to convert the amount to drops to avoid accuracy issues
-        amount=xrpl.utils.xrp_to_drops(int(amount)),
-        destination=destination,
-    )
-    try:
-        response = xrpl.transaction.submit_and_wait(payment, client, sending_wallet)
-    except xrpl.transaction.XRPLReliableSubmissionException as e:
-        response = f"Submit failed: {e}"
+    # Fetch account info to get the current balance
+    account_info = xrpl.account_info.get_account_info(sending_wallet.address, client)
+    balance_drops = int(account_info['result']['account_data']['Balance'])
 
-    return response
+    # Convert amount to drops
+    amount_drops = xrpl.utils.xrp_to_drops(float(amount))
+
+    # Estimate transaction fee (default is usually 10 drops, can vary)
+    fee_drops = 10
+
+    # Check if the balance is sufficient
+    if balance_drops < amount_drops + fee_drops:
+        return f"Insufficient funds: Balance is {balance_drops} drops, but need {amount_drops + fee_drops} drops (including fee)."
+    # Create a payment transaction
+    else:
+        payment = xrpl.models.transactions.Payment(
+            account=sending_wallet.address,
+            # use xrp_to_drops to convert the amount to drops to avoid accuracy issues
+            amount=xrpl.utils.xrp_to_drops(int(amount)),
+            destination=destination,
+        )
+        try:
+            response = xrpl.transaction.submit_and_wait(payment, client, sending_wallet)
+        except xrpl.transaction.XRPLReliableSubmissionException as e:
+            response = f"Submit failed: {e}"
+
+        return response
 
 
 if __name__ == '__main__':
@@ -62,6 +76,6 @@ if __name__ == '__main__':
     print(f"Account Info for {address}: {info}")
     new_wallet2 = get_account('')
     address2 = new_wallet2.classic_address
-    response = send_xrp(new_wallet.seed, 500, address2)
+    response = send_xrp(new_wallet.seed, 10, address2)
     print(f"Sent 500 XRP from {address} to {address2}: {response}")
     print()
