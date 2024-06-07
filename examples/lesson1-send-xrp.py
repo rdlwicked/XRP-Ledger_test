@@ -4,6 +4,7 @@ import json
 
 from mod1 import get_account, get_account_info, send_xrp
 
+
 #############################################
 ## Handlers #################################
 #############################################
@@ -22,16 +23,16 @@ def get_standby_account():
 def get_standby_account_info():
     accountInfo = get_account_info(ent_standby_account.get())
     ent_standby_balance.delete(0, tk.END)
-    ent_standby_balance.insert(0,accountInfo['Balance'])
+    ent_standby_balance.insert(0, accountInfo['Balance'])
     text_standby_results.delete("1.0", tk.END)
-    text_standby_results.insert("1.0",json.dumps(accountInfo, indent=4))
+    text_standby_results.insert("1.0", json.dumps(accountInfo, indent=4))
 
 
 def standby_send_xrp():
-    response = send_xrp(ent_standby_seed.get(),ent_standby_amount.get(),
-                       ent_standby_destination.get())
+    response = send_xrp(ent_standby_seed.get(), ent_standby_amount.get(),
+                        ent_standby_destination.get())
     text_standby_results.delete("1.0", tk.END)
-    text_standby_results.insert("1.0",json.dumps(response.result, indent=4))
+    text_standby_results.insert("1.0", json.dumps(response.result, indent=4))
     get_standby_account_info()
     get_operational_account_info()
 
@@ -47,15 +48,15 @@ def get_operational_account():
 def get_operational_account_info():
     accountInfo = get_account_info(ent_operational_account.get())
     ent_operational_balance.delete(0, tk.END)
-    ent_operational_balance.insert(0,accountInfo['Balance'])
+    ent_operational_balance.insert(0, accountInfo['Balance'])
     text_operational_results.delete("1.0", tk.END)
-    text_operational_results.insert("1.0",json.dumps(accountInfo, indent=4))
+    text_operational_results.insert("1.0", json.dumps(accountInfo, indent=4))
 
 
 def operational_send_xrp():
-    response = send_xrp(ent_operational_seed.get(),ent_operational_amount.get(), ent_operational_destination.get())
+    response = send_xrp(ent_operational_seed.get(), ent_operational_amount.get(), ent_operational_destination.get())
     text_operational_results.delete("1.0", tk.END)
-    text_operational_results.insert("1.0",json.dumps(response.result,indent=4))
+    text_operational_results.insert("1.0", json.dumps(response.result, indent=4))
     get_standby_account_info()
     get_operational_account_info()
 
@@ -79,8 +80,8 @@ lbl_standby_destination = tk.Label(master=frm_form, text="Destination")
 ent_standby_destination = tk.Entry(master=frm_form, width=50)
 lbl_standby_balance = tk.Label(master=frm_form, text="XRP Balance")
 ent_standby_balance = tk.Entry(master=frm_form, width=50)
-lbl_standby_results = tk.Label(master=frm_form,text='Results')
-text_standby_results = tk.Text(master=frm_form, height = 20, width = 65)
+lbl_standby_results = tk.Label(master=frm_form, text='Results')
+text_standby_results = tk.Text(master=frm_form, height=20, width=65)
 
 # Place fields in a grid.
 lbl_standy_seed.grid(row=0, column=0, sticky="w")
@@ -111,15 +112,14 @@ lbl_operational_destination = tk.Label(master=frm_form, text="Destination")
 ent_operational_destination = tk.Entry(master=frm_form, width=50)
 lbl_operational_balance = tk.Label(master=frm_form, text="XRP Balance")
 ent_operational_balance = tk.Entry(master=frm_form, width=50)
-lbl_operational_results = tk.Label(master=frm_form,text='Results')
-text_operational_results = tk.Text(master=frm_form, height = 20, width = 65)
-
+lbl_operational_results = tk.Label(master=frm_form, text='Results')
+text_operational_results = tk.Text(master=frm_form, height=20, width=65)
 
 #Place the widgets in a grid
 lbl_operational_seed.grid(row=0, column=4, sticky="e")
 ent_operational_seed.grid(row=0, column=5, sticky="w")
-lbl_operational_account.grid(row=2,column=4, sticky="e")
-ent_operational_account.grid(row=2,column=5, sticky="w")
+lbl_operational_account.grid(row=2, column=4, sticky="e")
+ent_operational_account.grid(row=2, column=5, sticky="w")
 lbl_operational_amount.grid(row=3, column=4, sticky="e")
 ent_operational_amount.grid(row=3, column=5, sticky="w")
 lbl_operational_destination.grid(row=4, column=4, sticky="e")
@@ -135,28 +135,27 @@ text_operational_results.grid(row=6, column=5, sticky="nw")
 
 # Create the Get Standby Account Buttons
 btn_get_standby_account = tk.Button(master=frm_form, text="Get Standby Account",
-                                    command = get_standby_account)
-btn_get_standby_account.grid(row=0, column=2, sticky = "nsew")
+                                    command=get_standby_account)
+btn_get_standby_account.grid(row=0, column=2, sticky="nsew")
 btn_get_standby_account_info = tk.Button(master=frm_form,
                                          text="Get Standby Account Info",
-                                         command = get_standby_account_info)
-btn_get_standby_account_info.grid(row=1, column=2, sticky = "nsew")
+                                         command=get_standby_account_info)
+btn_get_standby_account_info.grid(row=1, column=2, sticky="nsew")
 btn_standby_send_xrp = tk.Button(master=frm_form, text="Send XRP >",
-                                 command = standby_send_xrp)
-btn_standby_send_xrp.grid(row=2, column = 2, sticky = "nsew")
+                                 command=standby_send_xrp)
+btn_standby_send_xrp.grid(row=2, column=2, sticky="nsew")
 
 # Create the Operational Account Buttons
 btn_get_operational_account = tk.Button(master=frm_form,
                                         text="Get Operational Account",
-                                        command = get_operational_account)
-btn_get_operational_account.grid(row=0, column=3, sticky = "nsew")
+                                        command=get_operational_account)
+btn_get_operational_account.grid(row=0, column=3, sticky="nsew")
 btn_get_op_account_info = tk.Button(master=frm_form, text="Get Op Account Info",
-                                    command = get_operational_account_info)
-btn_get_op_account_info.grid(row=1, column=3, sticky = "nsew")
+                                    command=get_operational_account_info)
+btn_get_op_account_info.grid(row=1, column=3, sticky="nsew")
 btn_op_send_xrp = tk.Button(master=frm_form, text="< Send XRP",
-                            command = operational_send_xrp)
-btn_op_send_xrp.grid(row=2, column = 3, sticky = "nsew")
-
+                            command=operational_send_xrp)
+btn_op_send_xrp.grid(row=2, column=3, sticky="nsew")
 
 # Start the application
 window.mainloop()
